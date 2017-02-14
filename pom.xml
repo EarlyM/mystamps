@@ -10,16 +10,6 @@
 	
 	<dependencies>
 		
-		<!--
-			TODO: use com.github.heneke.thymeleaf from Maven Central when
-			https://github.com/heneke/thymeleaf-extras-togglz/issues/11 will be merged
-		-->
-		<dependency>
-			<groupId>com.github.php-coder</groupId>
-			<artifactId>thymeleaf-extras-togglz</artifactId>
-			<version>eb0cfd2833</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -30,6 +20,16 @@
 			<groupId>net.coobird</groupId>
 			<artifactId>thumbnailator</artifactId>
 			<version>${thumbnailator.version}</version>
+		</dependency>
+		
+		<!--
+			TODO: use com.github.heneke.thymeleaf from Maven Central when
+			https://github.com/heneke/thymeleaf-extras-togglz/issues/11 will be merged
+		-->
+		<dependency>
+			<groupId>com.github.php-coder</groupId>
+			<artifactId>thymeleaf-extras-togglz</artifactId>
+			<version>eb0cfd2833</version>
 		</dependency>
 		
 		<dependency>
