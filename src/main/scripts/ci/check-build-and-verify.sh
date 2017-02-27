@@ -151,7 +151,6 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 				'Attribute “(th|sec|togglz):[a-z]+” is not serializable' \
 				'Attribute with the local name “xmlns:[a-z]+” is not serializable' \
 				'An "img" element must have an "alt" attribute' \
-				'The first child "option" element of a "select" element with a "required" attribute' \
 				'This document appears to be written in (Danish|Lithuanian)' \
 			--show-warnings \
 			>validator.log 2>&1 || HTML_STATUS=fail
