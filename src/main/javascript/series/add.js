@@ -2,6 +2,10 @@
 // IMPORTANT:
 // You have to update Url.RESOURCES_VERSION each time whenever you're modified this file!
 //
+function exampleFunction() {
+	// do nothing
+}
+
 function initPage(suggestCountryUrl) {
 	$('#country').selectize();
 	
