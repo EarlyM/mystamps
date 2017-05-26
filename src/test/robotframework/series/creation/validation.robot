@@ -38,6 +38,36 @@ Create series with empty image
 	Submit Form             id=add-series-form
 	Element Text Should Be  id=image.errors  File must not be empty
 
+Create series with unsupported protocol in the image URL
+	[Documentation]         Verify validation of URL with unsupported protocol
+	Input Text              id=image-url  https://127.0.0.1:8080/invalid-imge-url-protocol
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image-url.errors  Value must be a valid URL
+
+Create series with unavailable server in the image URL
+	[Documentation]         Verify validation of URL to an unavailable server
+	Input Text              id=image-url  http://127.0.0.1:9999/not-existing-host
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image-url.errors  Could not connect to the server
+
+Create series with image URL to a file that does not exist
+	[Documentation]         Verify validation of URL to non existing file
+	Input Text              id=image-url  ${SITE_URL}/test/response/404
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image-url.errors  File not found
+
+Create series with image URL that causes a redirect
+	[Documentation]         Verify validation of URL with redirect
+	Input Text              id=image-url  ${SITE_URL}/test/response/301
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image-url.errors  URL must not redirect to another address
+
+Create series with image URL to an empty file
+	[Documentation]         Verify validation of URL to an empty file
+	Input Text              id=image-url  ${SITE_URL}/test/empty/jpeg-file
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image-url.errors  File must not be empty
+
 Catalog numbers should reject invalid values
 	[Documentation]  Verify that fields with catalog numbers reject invalid values
 	[Tags]           unstable

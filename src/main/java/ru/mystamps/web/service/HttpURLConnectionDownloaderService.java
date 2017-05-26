@@ -179,7 +179,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 		// TODO: content length can be -1 for gzipped responses
 		// TODO: add protection against huge files
 		int contentLength = conn.getContentLength();
-		if (contentLength <= 0) {
+		if (contentLength < 0) {
 			LOG.debug("Couldn't download file: invalid Content-Length: {}", contentLength);
 			return Code.INVALID_FILE_SIZE;
 		}
