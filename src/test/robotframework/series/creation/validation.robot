@@ -6,6 +6,14 @@ Suite Teardown   After Test Suite
 Force Tags       series  validation
 
 *** Test Cases ***
+Create series with empty required fields
+	[Documentation]         Verify validation of mandatory fields
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=category.errors  Value must not be empty
+	Element Text Should Be  id=quantity.errors  Value must not be empty
+	Element Text Should Be  id=image.errors      Image or image URL must be specified
+	Element Text Should Be  id=image-url.errors  Image or image URL must be specified
+
 Create series with non-numeric quantity
 	[Documentation]         Verify validation of non-numeric quantity
 	Input Text              id=quantity  NaN
