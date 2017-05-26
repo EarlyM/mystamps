@@ -29,18 +29,18 @@ import ru.mystamps.web.Url;
 @Controller
 public class TestController {
 	
-	@GetMapping("/test/response/301")
+	@GetMapping("/test/invalid/response-301")
 	public void redirect(HttpServletResponse response) {
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 		response.setHeader("Location", Url.SITE);
 	}
 	
-	@GetMapping("/test/response/404")
+	@GetMapping("/test/invalid/response-404")
 	public void notFound(HttpServletResponse response) throws IOException {
 		response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	}
 	
-	@GetMapping("/test/empty/jpeg-file")
+	@GetMapping("/test/invalid/empty-jpeg-file")
 	public void emptyJpegFile(HttpServletResponse response) {
 		response.setContentType("image/jpeg");
 		response.setContentLength(0);
