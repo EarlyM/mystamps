@@ -166,8 +166,8 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			}
 			
 		} else if (status != HttpURLConnection.HTTP_OK) {
-			LOG.debug("Couldn't download file: bad response status {}", status);
-			return Code.INVALID_RESPONSE_CODE;
+			LOG.debug("Couldn't download file: unexpected response status {}", status);
+			return Code.UNEXPECTED_ERROR;
 		}
 		
 		String contentType = conn.getContentType();
