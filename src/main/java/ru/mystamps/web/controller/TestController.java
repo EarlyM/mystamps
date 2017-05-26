@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ru.mystamps.web.Url;
 
@@ -44,6 +45,12 @@ public class TestController {
 	public void emptyJpegFile(HttpServletResponse response) {
 		response.setContentType("image/jpeg");
 		response.setContentLength(0);
+	}
+	
+	@GetMapping(path = "/test/invalid/not-image-file", produces = "application/json")
+	@ResponseBody
+	public String simpleJson() {
+		return "test";
 	}
 	
 }

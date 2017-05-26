@@ -68,6 +68,12 @@ Create series with image URL to an empty file
 	Submit Form             id=add-series-form
 	Element Text Should Be  id=image-url.errors  File must not be empty
 
+Create series with image URL to not an image file
+	[Documentation]         Verify validation of URL to a file of unsupported type
+	Input Text              id=image-url  ${SITE_URL}/test/invalid/not-image-file
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image-url.errors  Invalid file type
+
 Catalog numbers should reject invalid values
 	[Documentation]  Verify that fields with catalog numbers reject invalid values
 	[Tags]           unstable
