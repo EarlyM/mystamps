@@ -36,6 +36,11 @@ public class TestController {
 		response.setHeader("Location", Url.SITE);
 	}
 	
+	@GetMapping("/test/invalid/response-400")
+	public void badRequest(HttpServletResponse response) throws IOException {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+	}
+	
 	@GetMapping("/test/invalid/response-404")
 	public void notFound(HttpServletResponse response) throws IOException {
 		response.sendError(HttpServletResponse.SC_NOT_FOUND);

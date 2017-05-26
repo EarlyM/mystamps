@@ -50,6 +50,12 @@ Create series with unavailable server in the image URL
 	Submit Form             id=add-series-form
 	Element Text Should Be  id=image-url.errors  Could not connect to the server
 
+Create series with image URL with invalid response
+	[Documentation]         Verify validation of invalid response from a server
+	Input Text              id=image-url  ${SITE_URL}/test/invalid/response-400
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image-url.errors  Could not download file
+
 Create series with image URL to a file that does not exist
 	[Documentation]         Verify validation of URL to non existing file
 	Input Text              id=image-url  ${SITE_URL}/test/invalid/response-404
