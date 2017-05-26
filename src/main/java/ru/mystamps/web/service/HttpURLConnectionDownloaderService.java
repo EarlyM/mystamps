@@ -100,11 +100,12 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 	
 	private static Code validateUrl(URL url) {
 		// TODO: make it configurable
-		if ("http".equals(url.getProtocol())) {
+		String protocol = url.getProtocol();
+		if ("http".equals(protocol)) {
 			return Code.SUCCESS;
 		}
 		
-		LOG.debug("Couldn't download file: invalid protocol. Only HTTP protocol is supported");
+		LOG.debug("Couldn't download file: unsupported protocol '{}'", protocol);
 		return Code.INVALID_PROTOCOL;
 	}
 	
