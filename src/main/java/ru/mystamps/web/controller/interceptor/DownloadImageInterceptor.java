@@ -43,15 +43,17 @@ import ru.mystamps.web.service.dto.DownloadResult;
 @RequiredArgsConstructor
 public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 	
+	private static final Logger LOG = LoggerFactory.getLogger(DownloadImageInterceptor.class);
+	
 	/**
 	 * Field name that contains image URL.
 	 */
-	public static final String URL_PARAMETER_NAME   = "imageUrl";
+	public static final String URL_PARAMETER_NAME = "imageUrl";
 	
 	/**
 	 * Field name to which downloaded image will be bound.
 	 */
-	public static final String IMAGE_FIELD_NAME     = "downloadedImage";
+	public static final String IMAGE_FIELD_NAME = "downloadedImage";
 	
 	/**
 	 * Name of request attribute, that will be used for storing an error code.
@@ -61,8 +63,6 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 	 * of the members of the {@link DownloadResult} enum.
 	 */
 	public static final String ERROR_CODE_ATTR_NAME = "DownloadedImage.ErrorCode";
-	
-	private static final Logger LOG = LoggerFactory.getLogger(DownloadImageInterceptor.class);
 	
 	private final DownloaderService downloaderService;
 	
