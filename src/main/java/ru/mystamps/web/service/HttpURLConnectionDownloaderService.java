@@ -69,7 +69,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			
 			Code connectionResult = connect(conn);
 			if (connectionResult != Code.SUCCESS) {
-				return DownloadResult.failed(Code.COULD_NOT_CONNECT);
+				return connectionResult;
 			}
 			
 			try (InputStream stream = new BufferedInputStream(conn.getInputStream())) {
