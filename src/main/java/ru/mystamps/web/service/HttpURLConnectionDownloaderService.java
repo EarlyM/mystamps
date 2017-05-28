@@ -69,7 +69,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			
 			Code connectionResult = connect(conn);
 			if (connectionResult != Code.SUCCESS) {
-				return connectionResult;
+				return DownloadResult.failed(connectionResult);
 			}
 			
 			try (InputStream stream = new BufferedInputStream(conn.getInputStream())) {
@@ -153,7 +153,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 				"Couldn't download file: connect has failed with error '{}'",
 				ex.getMessage()
 			);
-			return Code.COULD_NOT_CONNECT;
+			return Code.UNEXPECTED_ERROR;
 		}
 	}
 	

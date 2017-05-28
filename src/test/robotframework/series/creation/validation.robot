@@ -44,12 +44,6 @@ Create series with unsupported protocol in the image URL
 	Submit Form             id=add-series-form
 	Element Text Should Be  id=image-url.errors  Value must be a valid URL
 
-Create series with unavailable server in the image URL
-	[Documentation]         Verify validation of URL to an unavailable server
-	Input Text              id=image-url  http://127.0.0.1:9999/not-existing-host
-	Submit Form             id=add-series-form
-	Element Text Should Be  id=image-url.errors  Could not connect to the server
-
 Create series with image URL with invalid response
 	[Documentation]         Verify validation of invalid response from a server
 	Input Text              id=image-url  ${SITE_URL}/test/invalid/response-400
