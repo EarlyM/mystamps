@@ -207,6 +207,12 @@ public class SeriesController {
 			request.removeAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
 		}
 		
+		// To ensure that user without permission can't save downloaded image, we clear this image
+		// TODO: try to not download file in the interceptor if user doesn't have permissions
+		if (!SecurityContextUtils.hasAuthority(Authority.DOWNLOAD_IMAGE)) {
+			form.setDownloadedImage(null);
+		}
+		
 		if (result.hasErrors()) {
 			String lang = LocaleUtils.getLanguageOrNull(userLocale);
 			
