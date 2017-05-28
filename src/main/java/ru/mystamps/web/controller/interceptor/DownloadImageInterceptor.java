@@ -34,6 +34,8 @@ import lombok.RequiredArgsConstructor;
 
 import ru.mystamps.web.service.DownloaderService;
 import ru.mystamps.web.service.dto.DownloadResult;
+import ru.mystamps.web.support.spring.security.Authority;
+import ru.mystamps.web.support.spring.security.SecurityContextUtils;
 
 /**
  * Converts image URL to an image by downloading it from a server and binding to a form field.
@@ -102,11 +104,21 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 		
+		if (!SecurityContextUtils.hasAuthority(Authority.DOWNLOAD_IMAGE)) {
+			LOG.warn(
+				"User #{} without permissions has tried to download file from '{}'",
+				SecurityContextUtils.getUserId(),
+				imageUrl
+			);
+			request.setAttribute(ERROR_CODE_ATTR_NAME, DownloadResult.Code.INSUFFICIENT_PERMISSIONS);
+			return true;
+		}
+		
 		// user specified image URL: we should download file and represent it as a field.
 		// Doing this our validation will be able to check downloaded file later.
 		DownloadResult result = downloaderService.download(imageUrl);
 		if (result.hasFailed()) {
-			setErrorMessage(request, result.getCode());
+			request.setAttribute(ERROR_CODE_ATTR_NAME, result.getCode());
 			return true;
 		}
 		
@@ -116,11 +128,6 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 		multipartRequest.getMultiFileMap().set(IMAGE_FIELD_NAME, downloadedImage);
 		
 		return true;
-	}
-	
-	private static void setErrorMessage(HttpServletRequest request, DownloadResult.Code errorCode) {
-		String msgCode = DownloadResult.class.getName() + "." + errorCode.toString();
-		request.setAttribute(ERROR_CODE_ATTR_NAME, msgCode);
 	}
 	
 }

@@ -192,17 +192,27 @@ public class SeriesController {
 		
 		Object downloadResultErrorCode =
 			request.getAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
-		if (downloadResultErrorCode instanceof String) {
-			String msgCode = (String)downloadResultErrorCode;
-			// Protocol is being validated by @URL, to avoid showing error message twice
-			// we're skipping error from an interceptor
-			if (!msgCode.endsWith(DownloadResult.Code.INVALID_URL.name())
-				&& !msgCode.endsWith(DownloadResult.Code.INVALID_PROTOCOL.name())) {
-				result.rejectValue(
-					DownloadImageInterceptor.IMAGE_FIELD_NAME,
-					msgCode,
-					"Could not download image"
-				);
+		if (downloadResultErrorCode instanceof DownloadResult.Code) {
+			DownloadResult.Code code = (DownloadResult.Code)downloadResultErrorCode;
+			switch (code) {
+				case INVALID_URL:
+				case INVALID_PROTOCOL:
+					// Protocol is being validated by @URL, to avoid showing error message
+					// twice we're skipping error from an interceptor
+					break;
+				case INSUFFICIENT_PERMISSIONS:
+					// User without permissions has tried to download a file. It means that he
+					// didn't specify a file but somehow provide a url to an image. In this case,
+					// let's show an error message that file is required.
+					result.rejectValue("image", "ru.mystamps.web.validation.jsr303.NotEmptyFilename.message");
+					form.setImageUrl(null);
+					break;
+				default:
+					result.rejectValue(
+						DownloadImageInterceptor.IMAGE_FIELD_NAME,
+						DownloadResult.class.getName() + "." + code.toString(),
+						"Could not download image"
+					);
 			}
 			request.removeAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
 		}
