@@ -82,11 +82,7 @@ public enum Features implements Feature {
 
 	@Label("/series/add: show link with auto-suggestions")
 	@EnabledByDefault
-	SHOW_SUGGESTION_LINK,
-	
-	@Label("/series/add: possibility to download image from external server")
-	@EnabledByDefault
-	DOWNLOAD_IMAGE;
+	SHOW_SUGGESTION_LINK;
 	
 	public boolean isActive() {
 		return FeatureContext.getFeatureManager().isActive(this);

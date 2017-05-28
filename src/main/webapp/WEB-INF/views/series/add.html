@@ -228,14 +228,16 @@
 									Image
 								</span>
 								<!--/*/
-								<span class="required_field" togglz:inactive="DOWNLOAD_IMAGE">*</span>
+								<span class="required_field" th:if="${not #authorization.expression('hasAuthority(''DOWNLOAD_IMAGE'')')}">*</span>
 								/*/-->
 							</label>
 							<div class="col-sm-7">
-								<input type="file" id="image" style="box-shadow: none; border: 0px;" accept="image/png,image/jpeg" th:field="*{image}" togglz:active="DOWNLOAD_IMAGE"/>
-								<!--/*/
-								<input type="file" id="image" style="box-shadow: none; border: 0px;" required="required" accept="image/png,image/jpeg" th:field="*{image}" togglz:inactive="DOWNLOAD_IMAGE"/>
-								/*/-->
+								<input id="image"
+									type="file"
+									style="box-shadow: none; border: 0px;"
+									accept="image/png,image/jpeg"
+									th:field="*{image}"
+									th:attr="required=${not #authorization.expression('hasAuthority(''DOWNLOAD_IMAGE'')') ? 'required' : null}" />
 								<small togglz:active="ADD_ADDITIONAL_IMAGES_TO_SERIES" sec:authorize="hasAuthority('ADD_IMAGES_TO_SERIES')">
 									<span class="hint-block" th:text="#{t_add_more_images_hint}">
 										Later you will be able to add additional images
@@ -247,7 +249,9 @@
 							</div>
 						</div>
 						
-						<div class="form-group form-group-sm" th:classappend="${#fields.hasErrors('imageUrl') or #fields.hasErrors('downloadedImage') ? 'has-error' : ''}" togglz:active="DOWNLOAD_IMAGE">
+						<div class="form-group form-group-sm"
+							th:classappend="${#fields.hasErrors('imageUrl') or #fields.hasErrors('downloadedImage') ? 'has-error' : ''}"
+							sec:authorize="hasAuthority('DOWNLOAD_IMAGE')">
 							<label for="image-url" class="control-label col-sm-3">
 								<span class="field-label" th:text="#{t_image_url}">
 									Image URL
