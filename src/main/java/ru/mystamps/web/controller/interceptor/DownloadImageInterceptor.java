@@ -45,8 +45,6 @@ import ru.mystamps.web.support.spring.security.SecurityContextUtils;
 @RequiredArgsConstructor
 public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(DownloadImageInterceptor.class);
-	
 	/**
 	 * Field name that contains image URL.
 	 */
@@ -65,6 +63,8 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 	 * of the members of the {@link DownloadResult} enum.
 	 */
 	public static final String ERROR_CODE_ATTR_NAME = "DownloadedImage.ErrorCode";
+	
+	private static final Logger LOG = LoggerFactory.getLogger(DownloadImageInterceptor.class);
 	
 	private final DownloaderService downloaderService;
 	
@@ -110,7 +110,10 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 				SecurityContextUtils.getUserId(),
 				imageUrl
 			);
-			request.setAttribute(ERROR_CODE_ATTR_NAME, DownloadResult.Code.INSUFFICIENT_PERMISSIONS);
+			request.setAttribute(
+				ERROR_CODE_ATTR_NAME,
+				DownloadResult.Code.INSUFFICIENT_PERMISSIONS
+			);
 			return true;
 		}
 		

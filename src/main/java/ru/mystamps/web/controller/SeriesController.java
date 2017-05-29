@@ -204,7 +204,10 @@ public class SeriesController {
 					// User without permissions has tried to download a file. It means that he
 					// didn't specify a file but somehow provide a url to an image. In this case,
 					// let's show an error message that file is required.
-					result.rejectValue("image", "ru.mystamps.web.validation.jsr303.NotEmptyFilename.message");
+					result.rejectValue(
+						"image",
+						"ru.mystamps.web.validation.jsr303.NotEmptyFilename.message"
+					);
 					form.setImageUrl(null);
 					break;
 				default:
@@ -213,6 +216,7 @@ public class SeriesController {
 						DownloadResult.class.getName() + "." + code.toString(),
 						"Could not download image"
 					);
+					break;
 			}
 			request.removeAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
 		}
