@@ -46,7 +46,6 @@ public class DownloadResult {
 	public enum Code {
 		SUCCESS,
 		INVALID_URL,
-		INVALID_PROTOCOL,
 		INVALID_REDIRECT,
 		INVALID_FILE_TYPE,
 		INVALID_FILE_SIZE,

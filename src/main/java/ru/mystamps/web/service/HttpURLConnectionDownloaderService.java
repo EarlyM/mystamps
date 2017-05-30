@@ -53,11 +53,6 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 		try {
 			URL url = new URL(fileUrl);
 			
-			Code validationResult = validateUrl(url);
-			if (validationResult != Code.SUCCESS) {
-				return DownloadResult.failed(validationResult);
-			}
-			
 			HttpURLConnection conn = openConnection(url);
 			if (conn == null) {
 				return DownloadResult.failed(Code.UNEXPECTED_ERROR);
@@ -73,7 +68,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			}
 			
 			try (InputStream stream = new BufferedInputStream(conn.getInputStream())) {
-				validationResult = validateConnection(conn);
+				Code validationResult = validateConnection(conn);
 				if (validationResult != Code.SUCCESS) {
 					return DownloadResult.failed(validationResult);
 				}
@@ -96,17 +91,6 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			return DownloadResult.failed(Code.UNEXPECTED_ERROR);
 		}
 		
-	}
-	
-	private static Code validateUrl(URL url) {
-		// TODO: make it configurable
-		String protocol = url.getProtocol();
-		if ("http".equals(protocol)) {
-			return Code.SUCCESS;
-		}
-		
-		LOG.debug("Couldn't download file: unsupported protocol '{}'", protocol);
-		return Code.INVALID_PROTOCOL;
 	}
 	
 	private static HttpURLConnection openConnection(URL url) throws IOException {

@@ -196,8 +196,7 @@ public class SeriesController {
 			DownloadResult.Code code = (DownloadResult.Code)downloadResultErrorCode;
 			switch (code) {
 				case INVALID_URL:
-				case INVALID_PROTOCOL:
-					// Protocol is being validated by @URL, to avoid showing error message
+					// Url is being validated by @URL, to avoid showing error message
 					// twice we're skipping error from an interceptor
 					break;
 				case INSUFFICIENT_PERMISSIONS:
