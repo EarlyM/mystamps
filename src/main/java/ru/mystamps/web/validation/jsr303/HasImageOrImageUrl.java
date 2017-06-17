@@ -18,19 +18,19 @@
 package ru.mystamps.web.validation.jsr303;
 
 /**
- * Interface of the form that could be validated by {@link RequireImageOrImageUrl} validator.
+ * Interface of the form that can be validated by {@link RequireImageOrImageUrl} validator.
  */
 public interface HasImageOrImageUrl {
 	
 	/**
-	 * Checks whether image was submitted.
+	 * Checks whether an image was submitted.
 	 * @return true if user uploading an image
 	 */
 	boolean hasImage();
 
 	/**
-	 * Checks whether image URL was specified.
-	 * @return true if user specified image URL
+	 * Checks whether an image URL was specified.
+	 * @return true if user specified an image URL
 	 */
 	boolean hasImageUrl();
 }
