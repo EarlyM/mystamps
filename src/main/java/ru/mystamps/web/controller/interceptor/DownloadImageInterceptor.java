@@ -56,9 +56,17 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 	public static final String DOWNLOADED_IMAGE_FIELD_NAME = "downloadedImage";
 	
 	/**
+	 * Field name of the image that is uploaded by a user.
+	 *
+	 * When it's present, we won't download an image from URL because a user should choose only one
+	 * image source.
+	 */
+	public static final String UPLOADED_IMAGE_FIELD_NAME = "image";
+	
+	/**
 	 * Name of request attribute, that will be used for storing an error code.
 	 *
-	 * To check whether an error has occurred, you can retrieve this attribute in a controller.
+	 * To check whether an error has occurred, you can retrieve this attribute within a controller.
 	 * When it's not {@code null}, it has the code in the format of fully-qualified name
 	 * of the member of the {@link DownloadResult} enum.
 	 */
@@ -98,8 +106,8 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 			(StandardMultipartHttpServletRequest)request;
 		
 		// Minor optimization: we don't try to download a file if we know that user also uploads its
-		// own file. This case also will be validated in controller and user will see an error.
-		MultipartFile image = multipartRequest.getFile("image");
+		// own file. This case also will be validated by a controller and user will see an error.
+		MultipartFile image = multipartRequest.getFile(UPLOADED_IMAGE_FIELD_NAME);
 		if (image != null && StringUtils.isNotEmpty(image.getOriginalFilename())) {
 			return true;
 		}
