@@ -41,6 +41,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 		LoggerFactory.getLogger(HttpURLConnectionDownloaderService.class);
 	
 	// We don't support redirects because they allow to bypass some of our validations.
+	// TODO: How exactly redirects can harm?
 	@SuppressWarnings({"PMD.RedundantFieldInitializer", "PMD.ImmutableField"})
 	private boolean followRedirects = false;
 	
@@ -132,10 +133,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			return Code.SUCCESS;
 			
 		} catch (IOException ex) {
-			LOG.debug(
-				"Couldn't download file: connect has failed with error '{}'",
-				ex.getMessage()
-			);
+			LOG.debug("Couldn't download file: connect() has failed", ex);
 			return Code.UNEXPECTED_ERROR;
 		}
 	}
