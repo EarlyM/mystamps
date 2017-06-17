@@ -77,6 +77,10 @@ class ByteArrayMultipartFile implements MultipartFile {
 		// Default mode is: CREATE, WRITE, and TRUNCATE_EXISTING.
 		// To prevent unexpected rewriting existing file, we're overriding this behavior by
 		// explicitly specifying options.
-		Files.write(dest.toPath(), content, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		Files.write(
+			dest.toPath(),
+			content,
+			StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE
+		);
 	}
 }
