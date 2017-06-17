@@ -73,6 +73,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 					return DownloadResult.failed(validationResult);
 				}
 				
+				// TODO(java9): use InputStream.readAllBytes()
 				byte[] data = StreamUtils.copyToByteArray(stream);
 				String contentType = conn.getContentType();
 				return DownloadResult.succeeded(data, contentType);
@@ -152,6 +153,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			return Code.UNEXPECTED_ERROR;
 		}
 		
+		// TODO: make it configurable
 		String contentType = conn.getContentType();
 		if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
 			// TODO(security): fix possible log injection
