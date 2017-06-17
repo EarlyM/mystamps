@@ -154,6 +154,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 		
 		String contentType = conn.getContentType();
 		if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+			// TODO(security): fix possible log injection
 			LOG.debug("Couldn't download file: unsupported file type '{}'", contentType);
 			return Code.INVALID_FILE_TYPE;
 		}
@@ -162,6 +163,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 		// TODO: add protection against huge files
 		int contentLength = conn.getContentLength();
 		if (contentLength < 0) {
+			// TODO(security): fix possible log injection
 			LOG.debug("Couldn't download file: invalid Content-Length: {}", contentLength);
 			return Code.INVALID_FILE_SIZE;
 		}
