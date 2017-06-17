@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,6 +74,9 @@ class ByteArrayMultipartFile implements MultipartFile {
 
 	@Override
 	public void transferTo(File dest) throws IOException, IllegalStateException {
-		Files.write(dest.toPath(), content);
+		// Default mode is: CREATE, WRITE, and TRUNCATE_EXISTING.
+		// To prevent unexpected rewriting existing file, we're overriding this behavior by
+		// explicitly specifying options.
+		Files.write(dest.toPath(), content, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 	}
 }
