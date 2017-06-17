@@ -134,18 +134,21 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	@Size(max = MAX_SERIES_COMMENT_LENGTH, message = "{value.too-long}")
 	private String comment;
 	
+	// Name of this field should match with the value of
+	// DownloadImageInterceptor.UPLOADED_IMAGE_FIELD_NAME.
 	//@NotEmptyFilename(groups = Image1Checks.class)
 	@NotEmptyFile(groups = Image2Checks.class)
 	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image3Checks.class)
 	@ImageFile(groups = Image3Checks.class)
 	private MultipartFile image;
 	
-	// Name of this field must match with the field name that
-	// is being inspected by DownloadImageInterceptor
+	// Name of this field must match with the value of DownloadImageInterceptor.URL_PARAMETER_NAME.
 	@URL(protocol = "http")
 	private String imageUrl;
 	
-	// This field holds a file that was downloaded from imageUrl
+	// This field holds a file that was downloaded from imageUrl.
+	// Name of this field must match with the value of
+	// DownloadImageInterceptor.DOWNLOADED_IMAGE_FIELD_NAME.
 	//@NotEmptyFilename(groups = Image1Checks.class)
 	@NotEmptyFile(groups = Image2Checks.class)
 	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image3Checks.class)
