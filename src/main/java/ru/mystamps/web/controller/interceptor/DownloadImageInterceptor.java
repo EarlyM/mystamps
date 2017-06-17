@@ -51,16 +51,16 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 	public static final String URL_PARAMETER_NAME = "imageUrl";
 	
 	/**
-	 * Field name to which downloaded image will be bound.
+	 * Field name to which a downloaded image will be bound.
 	 */
 	public static final String DOWNLOADED_IMAGE_FIELD_NAME = "downloadedImage";
 	
 	/**
 	 * Name of request attribute, that will be used for storing an error code.
 	 *
-	 * To check whether error has occurred, you can retrieve this attribute in a controller.
+	 * To check whether an error has occurred, you can retrieve this attribute in a controller.
 	 * When it's not {@code null}, it has the code in the format of fully-qualified name
-	 * of the members of the {@link DownloadResult} enum.
+	 * of the member of the {@link DownloadResult} enum.
 	 */
 	public static final String ERROR_CODE_ATTR_NAME = "DownloadedImage.ErrorCode";
 	
@@ -79,8 +79,7 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 		
-		// Inspecting AddSeriesForm.imageUrl field.
-		// If it doesn't have a value, then nothing to do here.
+		// If the field doesn't have a value, then nothing to do here.
 		String imageUrl = request.getParameter(URL_PARAMETER_NAME);
 		if (StringUtils.isEmpty(imageUrl)) {
 			return true;
@@ -97,16 +96,17 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 		
 		StandardMultipartHttpServletRequest multipartRequest =
 			(StandardMultipartHttpServletRequest)request;
+		
+		// Minor optimization: we don't try to download a file if we know that user also uploads its
+		// own file. This case also will be validated in controller and user will see an error.
 		MultipartFile image = multipartRequest.getFile("image");
 		if (image != null && StringUtils.isNotEmpty(image.getOriginalFilename())) {
-			LOG.debug("User provided image, exited");
-			// user specified both image and image URL, we'll handle it later, during validation
 			return true;
 		}
 		
 		if (!SecurityContextUtils.hasAuthority(Authority.DOWNLOAD_IMAGE)) {
 			LOG.warn(
-				"User #{} without permissions has tried to download file from '{}'",
+				"A user #{} without permissions has tried to download a file from '{}'",
 				SecurityContextUtils.getUserId(),
 				imageUrl
 			);
@@ -117,8 +117,8 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 		
-		// user specified image URL: we should download file and represent it as a field.
-		// Doing this our validation will be able to check downloaded file later.
+		// A user has specified an image URL: we should download a file and represent it as a field.
+		// Later we'll validate this file in a controller.
 		DownloadResult result = downloaderService.download(imageUrl);
 		if (result.hasFailed()) {
 			request.setAttribute(ERROR_CODE_ATTR_NAME, result.getCode());
