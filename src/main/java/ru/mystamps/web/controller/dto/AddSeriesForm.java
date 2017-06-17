@@ -143,7 +143,7 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	private MultipartFile image;
 	
 	// Name of this field must match with the value of DownloadImageInterceptor.URL_PARAMETER_NAME.
-	@URL(protocol = "http")
+	@URL
 	private String imageUrl;
 	
 	// This field holds a file that was downloaded from imageUrl.
