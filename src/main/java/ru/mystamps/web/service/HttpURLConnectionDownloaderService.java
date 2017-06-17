@@ -40,8 +40,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 	private static final Logger LOG =
 		LoggerFactory.getLogger(HttpURLConnectionDownloaderService.class);
 	
-	// we don't support redirects because it allows to bypass some of our validations
-	// (for example, for a protocol)
+	// We don't support redirects because they allow to bypass some of our validations.
 	@SuppressWarnings({"PMD.RedundantFieldInitializer", "PMD.ImmutableField"})
 	private boolean followRedirects = false;
 	
