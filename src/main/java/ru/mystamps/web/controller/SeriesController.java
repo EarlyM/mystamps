@@ -196,12 +196,12 @@ public class SeriesController {
 			DownloadResult.Code code = (DownloadResult.Code)downloadResultErrorCode;
 			switch (code) {
 				case INVALID_URL:
-					// Url is being validated by @URL, to avoid showing error message
-					// twice we're skipping error from an interceptor
+					// Url is being validated by @URL, to avoid showing an error message
+					// twice we're skipping error from an interceptor.
 					break;
 				case INSUFFICIENT_PERMISSIONS:
-					// User without permissions has tried to download a file. It means that he
-					// didn't specify a file but somehow provide a url to an image. In this case,
+					// A user without permissions has tried to download a file. It means that he
+					// didn't specify a file but somehow provide a URL to an image. In this case,
 					// let's show an error message that file is required.
 					result.rejectValue(
 						"image",
