@@ -53,7 +53,7 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 	/**
 	 * Field name to which downloaded image will be bound.
 	 */
-	public static final String IMAGE_FIELD_NAME = "downloadedImage";
+	public static final String DOWNLOADED_IMAGE_FIELD_NAME = "downloadedImage";
 	
 	/**
 	 * Name of request attribute, that will be used for storing an error code.
@@ -128,7 +128,7 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 		MultipartFile downloadedImage =
 			new ByteArrayMultipartFile(result.getData(), result.getContentType(), imageUrl);
 		
-		multipartRequest.getMultiFileMap().set(IMAGE_FIELD_NAME, downloadedImage);
+		multipartRequest.getMultiFileMap().set(DOWNLOADED_IMAGE_FIELD_NAME, downloadedImage);
 		
 		return true;
 	}

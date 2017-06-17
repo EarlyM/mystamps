@@ -211,7 +211,7 @@ public class SeriesController {
 					break;
 				default:
 					result.rejectValue(
-						DownloadImageInterceptor.IMAGE_FIELD_NAME,
+						DownloadImageInterceptor.DOWNLOADED_IMAGE_FIELD_NAME,
 						DownloadResult.class.getName() + "." + code.toString(),
 						"Could not download image"
 					);
