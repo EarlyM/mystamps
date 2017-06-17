@@ -21,8 +21,9 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * Implementation of {@link RequireImageOrImageUrl} validator.
- * If image and image URL fields are empty, it marks both fields as having an error.
+ * Implementation of the {@link RequireImageOrImageUrl} validator.
+ *
+ * If an image and an image URL fields are empty, it marks both fields as having an error.
  */
 public class RequireImageOrImageUrlValidator
 	implements ConstraintValidator<RequireImageOrImageUrl, HasImageOrImageUrl> {
