@@ -88,7 +88,7 @@ public class DownloadImageInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		// If the field doesn't have a value, then nothing to do here.
-		String imageUrl = request.getParameter(URL_PARAMETER_NAME);
+		String imageUrl = StringUtils.trimToEmpty(request.getParameter(URL_PARAMETER_NAME));
 		if (StringUtils.isEmpty(imageUrl)) {
 			return true;
 		}

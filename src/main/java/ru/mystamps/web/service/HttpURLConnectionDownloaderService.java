@@ -62,7 +62,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 	@PreAuthorize(HasAuthority.DOWNLOAD_IMAGE)
 	public DownloadResult download(String fileUrl) {
 		// TODO(security): fix possible log injection
-		LOG.debug("Downloading {}", fileUrl);
+		LOG.debug("Downloading '{}'", fileUrl);
 		
 		try {
 			URL url = new URL(fileUrl);
