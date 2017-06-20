@@ -34,10 +34,13 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.util.StreamUtils;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import lombok.RequiredArgsConstructor;
 
 import ru.mystamps.web.service.dto.DownloadResult;
 import ru.mystamps.web.service.dto.DownloadResult.Code;
+import ru.mystamps.web.support.spring.security.HasAuthority;
 
 @RequiredArgsConstructor
 public class HttpURLConnectionDownloaderService implements DownloaderService {
@@ -56,6 +59,7 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 	private final String[] allowedContentTypes;
 	
 	@Override
+	@PreAuthorize(HasAuthority.DOWNLOAD_IMAGE)
 	public DownloadResult download(String fileUrl) {
 		// TODO(security): fix possible log injection
 		LOG.debug("Downloading {}", fileUrl);
