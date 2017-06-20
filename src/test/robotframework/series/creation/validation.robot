@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation    Verify series creation validation scenarios
+Documentation    Verify series creation validation scenarios from admin
 Library          Selenium2Library
 Suite Setup      Before Test Suite
 Suite Teardown   After Test Suite
