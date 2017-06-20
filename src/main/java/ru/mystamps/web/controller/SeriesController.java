@@ -189,36 +189,8 @@ public class SeriesController {
 		Locale userLocale,
 		Model model,
 		HttpServletRequest request) {
-		
-		Object downloadResultErrorCode =
-			request.getAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
-		if (downloadResultErrorCode instanceof DownloadResult.Code) {
-			DownloadResult.Code code = (DownloadResult.Code)downloadResultErrorCode;
-			switch (code) {
-				case INVALID_URL:
-					// Url is being validated by @URL, to avoid showing an error message
-					// twice we're skipping error from an interceptor.
-					break;
-				case INSUFFICIENT_PERMISSIONS:
-					// A user without permissions has tried to download a file. It means that he
-					// didn't specify a file but somehow provide a URL to an image. In this case,
-					// let's show an error message that file is required.
-					result.rejectValue(
-						"image",
-						"ru.mystamps.web.validation.jsr303.NotEmptyFilename.message"
-					);
-					form.setImageUrl(null);
-					break;
-				default:
-					result.rejectValue(
-						DownloadImageInterceptor.DOWNLOADED_IMAGE_FIELD_NAME,
-						DownloadResult.class.getName() + "." + code.toString(),
-						"Could not download image"
-					);
-					break;
-			}
-			request.removeAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
-		}
+
+		loadErrorsFromDownloadIterceptor(form, result, request);
 		
 		if (result.hasErrors()) {
 			String lang = LocaleUtils.getLanguageOrNull(userLocale);
@@ -508,6 +480,44 @@ public class SeriesController {
 		
 		List<EntityWithIdDto> buyers = transactionParticipantService.findAllBuyers();
 		model.addAttribute("buyers", buyers);
+	}
+	
+	private static void loadErrorsFromDownloadIterceptor(AddSeriesForm form, BindingResult result, HttpServletRequest request) {
+		Object downloadResultErrorCode =
+			request.getAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
+		
+		if (downloadResultErrorCode == null) {
+			return;
+		}
+		
+		if (downloadResultErrorCode instanceof DownloadResult.Code) {
+			DownloadResult.Code code = (DownloadResult.Code)downloadResultErrorCode;
+			switch (code) {
+				case INVALID_URL:
+					// Url is being validated by @URL, to avoid showing an error message
+					// twice we're skipping error from an interceptor.
+					break;
+				case INSUFFICIENT_PERMISSIONS:
+					// A user without permissions has tried to download a file. It means that he
+					// didn't specify a file but somehow provide a URL to an image. In this case,
+					// let's show an error message that file is required.
+					result.rejectValue(
+						"image",
+						"ru.mystamps.web.validation.jsr303.NotEmptyFilename.message"
+					);
+					form.setImageUrl(null);
+					break;
+				default:
+					result.rejectValue(
+						DownloadImageInterceptor.DOWNLOADED_IMAGE_FIELD_NAME,
+						DownloadResult.class.getName() + "." + code.toString(),
+						"Could not download image"
+					);
+					break;
+			}
+		}
+		
+		request.removeAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
 	}
 	
 	private static void addImageFormToModel(Model model) {
