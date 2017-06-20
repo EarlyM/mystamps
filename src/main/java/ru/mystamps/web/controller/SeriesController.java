@@ -190,7 +190,7 @@ public class SeriesController {
 		Model model,
 		HttpServletRequest request) {
 
-		loadErrorsFromDownloadIterceptor(form, result, request);
+		loadErrorsFromDownloadInterceptor(form, result, request);
 		
 		if (result.hasErrors()) {
 			String lang = LocaleUtils.getLanguageOrNull(userLocale);
@@ -482,7 +482,11 @@ public class SeriesController {
 		model.addAttribute("buyers", buyers);
 	}
 	
-	private static void loadErrorsFromDownloadIterceptor(AddSeriesForm form, BindingResult result, HttpServletRequest request) {
+	private static void loadErrorsFromDownloadInterceptor(
+		AddSeriesForm form,
+		BindingResult result,
+		HttpServletRequest request) {
+		
 		Object downloadResultErrorCode =
 			request.getAttribute(DownloadImageInterceptor.ERROR_CODE_ATTR_NAME);
 		
