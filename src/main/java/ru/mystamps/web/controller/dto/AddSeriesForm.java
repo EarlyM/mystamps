@@ -164,11 +164,15 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 		return downloadedImage;
 	}
 	
+	// This method has to be implemented to satisfy HasImageOrImageUrl requirements.
+	// The latter is being used by RequireImageOrImageUrl validator.
 	@Override
 	public boolean hasImage() {
 		return image != null && StringUtils.isNotEmpty(image.getOriginalFilename());
 	}
 	
+	// This method has to be implemented to satisfy HasImageOrImageUrl requirements.
+	// The latter is being used by RequireImageOrImageUrl validator.
 	@Override
 	public boolean hasImageUrl() {
 		return StringUtils.isNotEmpty(imageUrl);
