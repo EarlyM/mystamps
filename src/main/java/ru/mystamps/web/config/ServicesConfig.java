@@ -78,7 +78,7 @@ public class ServicesConfig {
 	
 	@Bean
 	public DownloaderService getDownloaderService() {
-		return new HttpURLConnectionDownloaderService();
+		return new HttpURLConnectionDownloaderService(new String[]{"image/jpeg", "image/png"});
 	}
 	
 	@Bean

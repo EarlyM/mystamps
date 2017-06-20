@@ -27,14 +27,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.util.StreamUtils;
 
+import lombok.RequiredArgsConstructor;
+
 import ru.mystamps.web.service.dto.DownloadResult;
 import ru.mystamps.web.service.dto.DownloadResult.Code;
 
+@RequiredArgsConstructor
 public class HttpURLConnectionDownloaderService implements DownloaderService {
 	
 	private static final Logger LOG =
@@ -44,6 +49,11 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 	// TODO: How exactly redirects can harm?
 	@SuppressWarnings({"PMD.RedundantFieldInitializer", "PMD.ImmutableField"})
 	private boolean followRedirects = false;
+	
+	// Only types listed here will be downloaded. For other types, INVALID_FILE_TYPE error
+	// will be returned. An empty array (or null) means that all types are allowed.
+	// TODO: at this moment we do a case sensitive comparison. Should we change it?
+	private final String[] allowedContentTypes;
 	
 	@Override
 	public DownloadResult download(String fileUrl) {
@@ -153,9 +163,8 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 			return Code.UNEXPECTED_ERROR;
 		}
 		
-		// TODO: make it configurable
 		String contentType = conn.getContentType();
-		if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+		if (allowedContentTypes != null && !ArrayUtils.contains(allowedContentTypes, contentType)) {
 			// TODO(security): fix possible log injection
 			LOG.debug("Couldn't download file: unsupported file type '{}'", contentType);
 			return Code.INVALID_FILE_TYPE;
