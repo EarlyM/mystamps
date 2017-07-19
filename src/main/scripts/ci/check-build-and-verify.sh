@@ -132,7 +132,7 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	fi
 	
 	if [ "$RFLINT_STATUS" != 'skip' ]; then
-		rflint --error=all --ignore TooFewKeywordSteps --ignore TooManyTestSteps --configure LineTooLong:130 src/test/robotframework \
+		rflint --error=all --ignore TooFewKeywordSteps --ignore TooManyTestSteps --ignore TooManyTestCases --configure LineTooLong:130 src/test/robotframework \
 			>rflint.log 2>&1 || RFLINT_STATUS=fail
 	fi
 	
