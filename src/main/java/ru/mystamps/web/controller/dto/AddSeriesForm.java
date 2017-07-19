@@ -140,7 +140,7 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	@NotEmptyFilename(groups = RequireImageCheck.class)
 	@NotEmptyFile(groups = Image1Checks.class)
 	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image2Checks.class)
-	@ImageFile(groups = Image3Checks.class)
+	@ImageFile(groups = Image2Checks.class)
 	private MultipartFile image;
 	
 	// Name of this field must match with the value of DownloadImageInterceptor.URL_PARAMETER_NAME.
@@ -152,7 +152,7 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	// DownloadImageInterceptor.DOWNLOADED_IMAGE_FIELD_NAME.
 	@NotEmptyFile(groups = Image1Checks.class)
 	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image2Checks.class)
-	@ImageFile(groups = Image3Checks.class)
+	@ImageFile(groups = Image2Checks.class)
 	private MultipartFile downloadedImage;
 	
 	@Override
@@ -213,8 +213,7 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	
 	@GroupSequence({
 		Image1Checks.class,
-		Image2Checks.class,
-		Image3Checks.class
+		Image2Checks.class
 	})
 	public interface ImageChecks {
 	}
@@ -223,9 +222,6 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	}
 	
 	public interface Image2Checks {
-	}
-	
-	public interface Image3Checks {
 	}
 	
 }
