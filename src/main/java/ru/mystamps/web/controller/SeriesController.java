@@ -179,9 +179,25 @@ public class SeriesController {
 		return view;
 	}
 	
-	@PostMapping(Url.ADD_SERIES_PAGE)
+	@PostMapping(path = Url.ADD_SERIES_PAGE, params = "imageUrl")
+	public String processInputWithImageUrl(
+		@Validated({ Default.class,
+			AddSeriesForm.ImageUrlChecks.class,
+			AddSeriesForm.ReleaseDateChecks.class,
+			AddSeriesForm.ImageChecks.class }) AddSeriesForm form,
+		BindingResult result,
+		@CurrentUser Integer currentUserId,
+		Locale userLocale,
+		Model model,
+		HttpServletRequest request) {
+		
+		return processInput(form, result, currentUserId, userLocale, model, request);
+	}
+	
+	@PostMapping(path = Url.ADD_SERIES_PAGE, params = "!imageUrl")
 	public String processInput(
 		@Validated({ Default.class,
+			AddSeriesForm.RequireImageCheck.class,
 			AddSeriesForm.ReleaseDateChecks.class,
 			AddSeriesForm.ImageChecks.class }) AddSeriesForm form,
 		BindingResult result,

@@ -45,6 +45,7 @@ import ru.mystamps.web.support.beanvalidation.ImageFile;
 import ru.mystamps.web.support.beanvalidation.MaxFileSize;
 import ru.mystamps.web.support.beanvalidation.MaxFileSize.Unit;
 import ru.mystamps.web.support.beanvalidation.NotEmptyFile;
+import ru.mystamps.web.support.beanvalidation.NotEmptyFilename;
 import ru.mystamps.web.support.beanvalidation.NotNullIfFirstField;
 import ru.mystamps.web.support.beanvalidation.Price;
 import ru.mystamps.web.support.beanvalidation.ReleaseDateIsNotInFuture;
@@ -63,7 +64,7 @@ import static ru.mystamps.web.validation.ValidationRules.MIN_STAMPS_IN_SERIES;
 // TODO: image and downloadedImage should be filled together
 // TODO: combine price with currency to separate class
 @SuppressWarnings({ "PMD.TooManyFields", "PMD.AvoidDuplicateLiterals" })
-@RequireImageOrImageUrl
+@RequireImageOrImageUrl(groups = AddSeriesForm.ImageUrl1Checks.class)
 @NotNullIfFirstField.List({
 	@NotNullIfFirstField(
 		first = "month", second = "year", message = "{month.requires.year}",
@@ -136,22 +137,21 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	
 	// Name of this field should match with the value of
 	// DownloadImageInterceptor.UPLOADED_IMAGE_FIELD_NAME.
-	//@NotEmptyFilename(groups = Image1Checks.class)
-	@NotEmptyFile(groups = Image2Checks.class)
-	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image3Checks.class)
+	@NotEmptyFilename(groups = RequireImageCheck.class)
+	@NotEmptyFile(groups = Image1Checks.class)
+	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image2Checks.class)
 	@ImageFile(groups = Image3Checks.class)
 	private MultipartFile image;
 	
 	// Name of this field must match with the value of DownloadImageInterceptor.URL_PARAMETER_NAME.
-	@URL
+	@URL(groups = AddSeriesForm.ImageUrl2Checks.class)
 	private String imageUrl;
 	
 	// This field holds a file that was downloaded from imageUrl.
 	// Name of this field must match with the value of
 	// DownloadImageInterceptor.DOWNLOADED_IMAGE_FIELD_NAME.
-	//@NotEmptyFilename(groups = Image1Checks.class)
-	@NotEmptyFile(groups = Image2Checks.class)
-	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image3Checks.class)
+	@NotEmptyFile(groups = Image1Checks.class)
+	@MaxFileSize(value = MAX_IMAGE_SIZE, unit = Unit.Kbytes, groups = Image2Checks.class)
 	@ImageFile(groups = Image3Checks.class)
 	private MultipartFile downloadedImage;
 	
@@ -193,6 +193,22 @@ public class AddSeriesForm implements AddSeriesDto, HasImageOrImageUrl {
 	}
 	
 	public interface ReleaseDate3Checks {
+	}
+	
+	public interface RequireImageCheck {
+	}
+	
+	@GroupSequence({
+		ImageUrl1Checks.class,
+		ImageUrl2Checks.class,
+	})
+	public interface ImageUrlChecks {
+	}
+	
+	public interface ImageUrl1Checks {
+	}
+	
+	public interface ImageUrl2Checks {
 	}
 	
 	@GroupSequence({
