@@ -133,7 +133,7 @@ public class ControllersConfig {
 	}
 
 	@Bean
-	@Profile("test")
+	@Profile({ "test", "travis" })
 	public TestController getTestController() {
 		return new TestController();
 	}
