@@ -53,6 +53,7 @@ class SeriesServiceImplTest extends Specification {
 	private AddImageForm imageForm
 	private Integer userId
 	
+	@SuppressWarnings('UnnecessaryGetter')
 	def setup() {
 		form = new AddSeriesForm()
 		form.setQuantity(2)
