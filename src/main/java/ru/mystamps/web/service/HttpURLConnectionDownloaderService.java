@@ -21,6 +21,7 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -146,7 +147,11 @@ public class HttpURLConnectionDownloaderService implements DownloaderService {
 		try {
 			conn.connect();
 			return Code.SUCCESS;
-			
+		
+		} catch (ConnectException ignored) {
+			LOG.debug("Couldn't download file: connect() has failed");
+			return Code.UNEXPECTED_ERROR;
+		
 		} catch (IOException ex) {
 			LOG.debug("Couldn't download file: connect() has failed", ex);
 			return Code.UNEXPECTED_ERROR;
