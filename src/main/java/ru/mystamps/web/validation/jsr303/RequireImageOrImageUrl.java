@@ -29,7 +29,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Validates that an image or an image URL is specified.
+ * Validates that an image or an image URL is specified but not both.
  *
  * In order to be validated by this validator, target form must implement the
  * {@link HasImageOrImageUrl} interface.
