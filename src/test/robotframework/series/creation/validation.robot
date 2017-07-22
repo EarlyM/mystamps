@@ -38,6 +38,14 @@ Create series with empty image
 	Submit Form             id=add-series-form
 	Element Text Should Be  id=image.errors  File must not be empty
 
+Create series with both image and an image URL
+	[Documentation]         Verify validation of an image and an image URL provided at the same time
+	Choose File             id=image      ${TEST_RESOURCE_DIR}${/}empty.png
+	Input Text              id=image-url  ${SITE_URL}/image/1
+	Submit Form             id=add-series-form
+	Element Text Should Be  id=image.errors      Image or image URL must be specified
+	Element Text Should Be  id=image-url.errors  Image or image URL must be specified
+
 Create series with image URL with invalid response
 	[Documentation]         Verify validation of invalid response from a server
 	Input Text              id=image-url  ${SITE_URL}/test/invalid/response-400
