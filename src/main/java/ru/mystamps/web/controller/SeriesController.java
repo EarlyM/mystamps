@@ -523,7 +523,7 @@ public class SeriesController {
 					// let's show an error message that file is required.
 					result.rejectValue(
 						"image",
-						"ru.mystamps.web.validation.jsr303.NotEmptyFilename.message"
+						"ru.mystamps.web.support.beanvalidation.NotEmptyFilename.message"
 					);
 					form.setImageUrl(null);
 					break;
