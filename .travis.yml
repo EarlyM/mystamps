@@ -10,7 +10,7 @@ env:
 
 before_script:
   #- set -o errexit # exit immediately when commands return a non-zero status
-  - sudo cp /var/log/mysql/err.log{,.orig}
+  - sudo cp /var/log/mysql/err.log /var/log/mysql/err.log.orig
   - sudo cat /var/log/mysql/err.log
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
       mysql -u root -e 'CREATE DATABASE mystamps CHARACTER SET utf8;';
@@ -27,7 +27,7 @@ before_script:
         gem install danger nokogiri --no-ri --no-rdoc;
       fi;
     fi
-  - sudo diff -u /var/log/mysql/err.log{.orig,}
+  - sudo diff -u /var/log/mysql/err.log.orig /var/log/mysql/err.log
 
 script:
   - set -o errexit # exit immediately when commands return a non-zero status
