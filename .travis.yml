@@ -27,15 +27,16 @@ before_script:
         gem install danger nokogiri --no-ri --no-rdoc;
       fi;
     fi
-  - sudo diff -u /var/log/mysql/error.log.orig /var/log/mysql/error.log
 
 script:
   - set -o errexit # exit immediately when commands return a non-zero status
+  - mysql -u travis -e 'SELECT * FROM countries;';
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
       ./src/main/scripts/ci/check-build-and-verify.sh;
     else
       ./src/main/scripts/ci/check-build-and-verify.sh --only-integration-tests;
     fi
+  - sudo diff -u /var/log/mysql/error.log.orig /var/log/mysql/error.log
 
 after_success:
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then

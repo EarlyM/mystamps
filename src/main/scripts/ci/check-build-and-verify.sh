@@ -183,8 +183,10 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	fi
 fi
 
+# we need -z option to be able to replace a new line character
 mvn --batch-mode verify -Denforcer.skip=true -DskipUnitTests=true \
 	| egrep -v '^\[INFO\] Download(ing|ed):' \
+	| sed -z -f "$(dirname "$0")/ignore-htmlunit-messages.sed" \
 	|| VERIFY_STATUS=${PIPESTATUS[0]}
 
 if [ "$DANGER_STATUS" != 'skip' ]; then
