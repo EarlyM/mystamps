@@ -1,6 +1,6 @@
 print_status() {
 	# $1 is empty if check has succeeded
-	# $1 equals to 'fail' if check has failed
+	# $1 equals to 'fail' or '1' if check has failed
 	# $1 equals to 'skip' if check has skipped
 	local result="$1"
 	local msg="$2"
@@ -8,7 +8,7 @@ print_status() {
 	local status='SUCCESS'
 	local color=32
 	
-	if [ "$result" = 'fail' ]; then
+	if [ "$result" = 'fail' -o "$result" = '1' ]; then
 		status='FAIL'
 		color=31
 	elif [ "$result" = 'skip' ]; then
