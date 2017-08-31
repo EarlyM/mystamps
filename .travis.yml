@@ -29,7 +29,7 @@ before_script:
     fi
 
 script:
-  - set -o errexit # exit immediately when commands return a non-zero status
+  #- set -o errexit # exit immediately when commands return a non-zero status
   - mysql -u travis -d mystamps -e 'SELECT * FROM countries;';
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
       ./src/main/scripts/ci/check-build-and-verify.sh;
