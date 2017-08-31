@@ -103,27 +103,32 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	
 	if [ "$CS_STATUS" != 'skip' ]; then
 		mvn --batch-mode checkstyle:check -Dcheckstyle.violationSeverity=warning \
-			|| CS_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| CS_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$PMD_STATUS" != 'skip' ]; then
 		mvn --batch-mode pmd:check \
-			|| PMD_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| PMD_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$CODENARC_STATUS" != 'skip' ]; then
 		mvn --batch-mode codenarc:codenarc -Dcodenarc.maxPriority1Violations=0 -Dcodenarc.maxPriority2Violations=0 -Dcodenarc.maxPriority3Violations=0 \
-			|| CODENARC_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| CODENARC_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$LICENSE_STATUS" != 'skip' ]; then
 		mvn --batch-mode license:check \
-			|| LICENSE_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| LICENSE_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$POM_STATUS" != 'skip' ]; then
 		mvn --batch-mode sortpom:verify -Dsort.verifyFail=stop \
-			|| POM_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| POM_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$BOOTLINT_STATUS" != 'skip' ]; then
@@ -138,7 +143,8 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	
 	if [ "$JASMINE_STATUS" != 'skip' ]; then
 		mvn --batch-mode jasmine:test \
-			|| JASMINE_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| JASMINE_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$HTML_STATUS" != 'skip' ]; then
@@ -159,23 +165,27 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	
 	if [ "$ENFORCER_STATUS" != 'skip' ]; then
 		mvn --batch-mode enforcer:enforce \
-			|| ENFORCER_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| ENFORCER_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$TEST_STATUS" != 'skip' ]; then
 		mvn --batch-mode test -Denforcer.skip=true -Dmaven.resources.skip=true -DskipMinify=true -DdisableXmlReport=false \
-			|| TEST_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| TEST_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$FINDBUGS_STATUS" != 'skip' ]; then
 		# run after tests for getting compiled sources
 		mvn --batch-mode findbugs:check \
-			|| FINDBUGS_STATUS=fail
+			| egrep -v '^\[INFO\] Download(ing|ed):' \
+			|| FINDBUGS_STATUS=${PIPESTATUS[0]}
 	fi
 fi
 
 mvn --batch-mode verify -Denforcer.skip=true -DskipUnitTests=true \
-	|| VERIFY_STATUS=fail
+	| egrep -v '^\[INFO\] Download(ing|ed):' \
+	|| VERIFY_STATUS=${PIPESTATUS[0]}
 
 if [ "$DANGER_STATUS" != 'skip' ]; then
 	danger || DANGER_STATUS=fail
