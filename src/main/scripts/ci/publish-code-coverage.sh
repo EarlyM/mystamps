@@ -14,7 +14,9 @@ set -o pipefail
 
 JACOCO_FAIL=
 
-mvn --batch-mode jacoco:prepare-agent test jacoco:report coveralls:jacoco -Denforcer.skip=true -DskipMinify=true || JACOCO_FAIL=yes
+mvn --batch-mode jacoco:prepare-agent test jacoco:report coveralls:jacoco -Denforcer.skip=true -DskipMinify=true \
+	| egrep -v '^\[INFO\] Download(ing|ed):' \
+	|| JACOCO_FAIL=${PIPESTATUS[0]}
 
 print_status "$JACOCO_FAIL" 'Publish code coverage'
 
