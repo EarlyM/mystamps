@@ -103,42 +103,42 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	
 	if [ "$CS_STATUS" != 'skip' ]; then
 		mvn --batch-mode checkstyle:check -Dcheckstyle.violationSeverity=warning \
-			>cs.log 2>&1 || CS_STATUS=fail
+			|| CS_STATUS=fail
 	fi
 	
 	if [ "$PMD_STATUS" != 'skip' ]; then
 		mvn --batch-mode pmd:check \
-			>pmd.log 2>&1 || PMD_STATUS=fail
+			|| PMD_STATUS=fail
 	fi
 	
 	if [ "$CODENARC_STATUS" != 'skip' ]; then
 		mvn --batch-mode codenarc:codenarc -Dcodenarc.maxPriority1Violations=0 -Dcodenarc.maxPriority2Violations=0 -Dcodenarc.maxPriority3Violations=0 \
-			>codenarc.log 2>&1 || CODENARC_STATUS=fail
+			|| CODENARC_STATUS=fail
 	fi
 	
 	if [ "$LICENSE_STATUS" != 'skip' ]; then
 		mvn --batch-mode license:check \
-			>license.log 2>&1 || LICENSE_STATUS=fail
+			|| LICENSE_STATUS=fail
 	fi
 	
 	if [ "$POM_STATUS" != 'skip' ]; then
 		mvn --batch-mode sortpom:verify -Dsort.verifyFail=stop \
-			>pom.log 2>&1 || POM_STATUS=fail
+			|| POM_STATUS=fail
 	fi
 	
 	if [ "$BOOTLINT_STATUS" != 'skip' ]; then
 		find src -type f -name '*.html' | xargs bootlint \
-			>bootlint.log 2>&1 || BOOTLINT_STATUS=fail
+			|| BOOTLINT_STATUS=fail
 	fi
 	
 	if [ "$RFLINT_STATUS" != 'skip' ]; then
 		rflint --error=all --ignore TooFewKeywordSteps --ignore TooManyTestSteps --configure LineTooLong:130 src/test/robotframework \
-			>rflint.log 2>&1 || RFLINT_STATUS=fail
+			|| RFLINT_STATUS=fail
 	fi
 	
 	if [ "$JASMINE_STATUS" != 'skip' ]; then
 		mvn --batch-mode jasmine:test \
-			>jasmine.log 2>&1 || JASMINE_STATUS=fail
+			|| JASMINE_STATUS=fail
 	fi
 	
 	if [ "$HTML_STATUS" != 'skip' ]; then
@@ -154,35 +154,32 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 				'The first child "option" element of a "select" element with a "required" attribute' \
 				'This document appears to be written in (Danish|Lithuanian)' \
 			--show-warnings \
-			>validator.log 2>&1 || HTML_STATUS=fail
+			|| HTML_STATUS=fail
 	fi
 	
 	if [ "$ENFORCER_STATUS" != 'skip' ]; then
 		mvn --batch-mode enforcer:enforce \
-			>enforcer.log 2>&1 || ENFORCER_STATUS=fail
+			|| ENFORCER_STATUS=fail
 	fi
 	
 	if [ "$TEST_STATUS" != 'skip' ]; then
 		mvn --batch-mode test -Denforcer.skip=true -Dmaven.resources.skip=true -DskipMinify=true -DdisableXmlReport=false \
-			>test.log 2>&1 || TEST_STATUS=fail
+			|| TEST_STATUS=fail
 	fi
 	
 	if [ "$FINDBUGS_STATUS" != 'skip' ]; then
 		# run after tests for getting compiled sources
 		mvn --batch-mode findbugs:check \
-			>findbugs.log 2>&1 || FINDBUGS_STATUS=fail
+			|| FINDBUGS_STATUS=fail
 	fi
 fi
 
 mvn --batch-mode verify -Denforcer.skip=true -DskipUnitTests=true \
-	>verify-raw.log 2>&1 || VERIFY_STATUS=fail
+	|| VERIFY_STATUS=fail
 
 if [ "$DANGER_STATUS" != 'skip' ]; then
-	danger >danger.log 2>&1 || DANGER_STATUS=fail
+	danger || DANGER_STATUS=fail
 fi
-
-# Workaround for #538
-"$(dirname "$0")/filter-out-htmlunit-messages.pl" <verify-raw.log >verify.log
 
 echo
 echo 'Build summary:'
@@ -208,27 +205,6 @@ print_status "$DANGER_STATUS" 'Run danger'
 
 echo
 
-if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
-	[ "$CS_STATUS" = 'skip' ]       || print_log cs.log        'Run CheckStyle'
-	[ "$PMD_STATUS" = 'skip' ]      || print_log pmd.log       'Run PMD'
-	[ "$CODENARC_STATUS" = 'skip' ] || print_log codenarc.log  'Run CodeNarc'
-	[ "$LICENSE_STATUS" = 'skip' ]  || print_log license.log   'Check license headers'
-	[ "$POM_STATUS" = 'skip' ]      || print_log pom.log       'Check sorting of pom.xml'
-	[ "$BOOTLINT_STATUS" = 'skip' ] || print_log bootlint.log  'Run bootlint'
-	[ "$RFLINT_STATUS" = 'skip' ]   || print_log rflint.log    'Run robot framework lint'
-	[ "$JASMINE_STATUS" = 'skip' ]  || print_log jasmine.log   'Run JavaScript unit tests'
-	[ "$HTML_STATUS" = 'skip' ]     || print_log validator.log 'Run html5validator'
-	[ "$ENFORCER_STATUS" = 'skip' ] || print_log enforcer.log  'Run maven-enforcer-plugin'
-	[ "$TEST_STATUS" = 'skip' ]     || print_log test.log      'Run unit tests'
-	[ "$FINDBUGS_STATUS" = 'skip' ] || print_log findbugs.log  'Run FindBugs'
-fi
-
-print_log verify.log   'Run integration tests'
-
-if [ "$DANGER_STATUS" != 'skip' ]; then
-	print_log danger.log 'Run danger'
-fi
-
 # In order to be able debug robot framework test flakes we need to have a report.
 # Just encode it to a gzipped binary form and dump to console.
 if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
@@ -236,8 +212,6 @@ if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
 	cat target/robotframework-reports/output.xml | gzip -c | base64
 	echo "===== REPORT END ====="
 fi
-
-rm -f cs.log pmd.log codenarc.log license.log pom.log bootlint.log rflint.log jasmine.log validator.log enforcer.log test.log findbugs.log verify-raw.log verify.log danger.log
 
 if echo "$CS_STATUS$PMD_STATUS$CODENARC_STATUS$LICENSE_STATUS$POM_STATUS$BOOTLINT_STATUS$RFLINT_STATUS$JASMINE_STATUS$HTML_STATUS$ENFORCER_STATUS$TEST_STATUS$FINDBUGS_STATUS$VERIFY_STATUS$DANGER_STATUS" | fgrep -qs 'fail'; then
 	exit 1
