@@ -17,3 +17,11 @@ print_status() {
 	fi
 	printf "* %s... \033[1;%dm%s\033[0m\n" "$msg" "$color" "$status"
 }
+
+print_banner() {
+	local msg="$1"
+	
+	echo
+	printf "=====> \033[1;33m%s\033[0m\n" "$msg"
+	echo
+}

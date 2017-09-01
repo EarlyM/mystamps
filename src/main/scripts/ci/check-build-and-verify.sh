@@ -102,52 +102,61 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	fi
 	
 	if [ "$CS_STATUS" != 'skip' ]; then
+		print_banner 'Run maven-checkstyle-plugin'
 		mvn --batch-mode checkstyle:check -Dcheckstyle.violationSeverity=warning \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| CS_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$PMD_STATUS" != 'skip' ]; then
+		print_banner 'Run maven-pmd-plugin'
 		mvn --batch-mode pmd:check \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| PMD_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$CODENARC_STATUS" != 'skip' ]; then
+		print_banner 'Run codenarc-maven-plugin'
 		mvn --batch-mode codenarc:codenarc -Dcodenarc.maxPriority1Violations=0 -Dcodenarc.maxPriority2Violations=0 -Dcodenarc.maxPriority3Violations=0 \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| CODENARC_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$LICENSE_STATUS" != 'skip' ]; then
+		print_banner 'Run license-maven-plugin'
 		mvn --batch-mode license:check \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| LICENSE_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$POM_STATUS" != 'skip' ]; then
+		print_banner 'Run sortpom-maven-plugin'
 		mvn --batch-mode sortpom:verify -Dsort.verifyFail=stop \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| POM_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$BOOTLINT_STATUS" != 'skip' ]; then
+		print_banner 'Run bootlint'
 		find src -type f -name '*.html' | xargs bootlint \
 			|| BOOTLINT_STATUS=fail
 	fi
 	
 	if [ "$RFLINT_STATUS" != 'skip' ]; then
+		print_banner 'Run rflint'
 		rflint --error=all --ignore TooFewKeywordSteps --ignore TooManyTestSteps --configure LineTooLong:130 src/test/robotframework \
 			|| RFLINT_STATUS=fail
 	fi
 	
 	if [ "$JASMINE_STATUS" != 'skip' ]; then
+		print_banner 'Run jasmine-maven-plugin'
 		mvn --batch-mode jasmine:test \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| JASMINE_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$HTML_STATUS" != 'skip' ]; then
+		print_banner 'Run html5validator'
 		# FIXME: add check for src/main/config/nginx/503.*html
 		# TODO: remove ignoring of error about alt attribute after resolving #314
 		# TODO: remove ignoring of error about document language when it will be resolved in upstream
@@ -164,18 +173,21 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	fi
 	
 	if [ "$ENFORCER_STATUS" != 'skip' ]; then
+		print_banner 'Run maven-enforcer-plugin'
 		mvn --batch-mode enforcer:enforce \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| ENFORCER_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$TEST_STATUS" != 'skip' ]; then
+		print_banner 'Run unit tests'
 		mvn --batch-mode test -Denforcer.skip=true -Dmaven.resources.skip=true -DskipMinify=true -DdisableXmlReport=false \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
 			|| TEST_STATUS=${PIPESTATUS[0]}
 	fi
 	
 	if [ "$FINDBUGS_STATUS" != 'skip' ]; then
+		print_banner 'Run findbugs-maven-plugin'
 		# run after tests for getting compiled sources
 		mvn --batch-mode findbugs:check \
 			| egrep -v '^\[INFO\] Download(ing|ed):' \
@@ -183,6 +195,7 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	fi
 fi
 
+print_banner 'Run integration tests'
 # we need -z option to be able to replace a new line character
 mvn --batch-mode verify -Denforcer.skip=true -DskipUnitTests=true \
 	| egrep -v '^\[INFO\] Download(ing|ed):' \
@@ -190,6 +203,7 @@ mvn --batch-mode verify -Denforcer.skip=true -DskipUnitTests=true \
 	|| VERIFY_STATUS=${PIPESTATUS[0]}
 
 if [ "$DANGER_STATUS" != 'skip' ]; then
+	print_banner 'Run danger'
 	danger || DANGER_STATUS=fail
 fi
 
