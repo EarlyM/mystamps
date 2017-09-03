@@ -26,4 +26,5 @@ print_log() {
 	printf "=====> \033[1;33m%s\033[0m\n" "$msg"
 	echo
 	egrep -v '^\[INFO\] Download(ing|ed):' "$log_file" | tail -100 || :
+	sleep 1
 }
