@@ -218,7 +218,7 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 fi
 
 if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'yes' ]; then
-	print_last_lines_of_log verify.log 'Run integration tests'
+	print_log verify.log 'Run integration tests'
 fi
 
 if [ "$DANGER_STATUS" != 'skip' ]; then
