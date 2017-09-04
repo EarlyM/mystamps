@@ -188,13 +188,14 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	print_status "$FINDBUGS_STATUS" 'Run FindBugs'
 fi
 
-mvn --batch-mode verify -Denforcer.skip=true -DskipUnitTests=true \
-	>verify-raw.log 2>&1 || VERIFY_STATUS=fail
-# Workaround for #538
-"$(dirname "$0")/filter-out-htmlunit-messages.pl" <verify-raw.log >verify.log
-
-print_status "$VERIFY_STATUS" 'Run integration tests'
-
+if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'yes' ]; then
+	mvn --batch-mode verify -Denforcer.skip=true -DskipUnitTests=true \
+		>verify-raw.log 2>&1 || VERIFY_STATUS=fail
+	# Workaround for #538
+	"$(dirname "$0")/filter-out-htmlunit-messages.pl" <verify-raw.log >verify.log
+	
+	print_status "$VERIFY_STATUS" 'Run integration tests'
+fi
 
 if [ "$DANGER_STATUS" != 'skip' ]; then
 	danger >danger.log 2>&1 || DANGER_STATUS=fail
@@ -216,18 +217,22 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'no' ]; then
 	[ "$FINDBUGS_STATUS" = 'skip' ] || print_log findbugs.log  'Run FindBugs'
 fi
 
-print_log verify.log   'Run integration tests'
+if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'yes' ]; then
+	print_log verify.log   'Run integration tests'
+fi
 
 if [ "$DANGER_STATUS" != 'skip' ]; then
 	print_log danger.log 'Run danger'
 fi
 
-# In order to be able debug robot framework test flakes we need to have a report.
-# Just encode it to a gzipped binary form and dump to console.
-if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
-	echo "===== REPORT START ====="
-	cat target/robotframework-reports/output.xml | gzip -c | base64
-	echo "===== REPORT END ====="
+if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'yes' ]; then
+	# In order to be able debug robot framework test flakes we need to have a report.
+	# Just encode it to a gzipped binary form and dump to console.
+	if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
+		echo "===== REPORT START ====="
+		cat target/robotframework-reports/output.xml | gzip -c | base64
+		echo "===== REPORT END ====="
+	fi
 fi
 
 rm -f cs.log pmd.log codenarc.log license.log pom.log bootlint.log rflint.log jasmine.log validator.log enforcer.log test.log findbugs.log verify-raw.log verify.log danger.log
