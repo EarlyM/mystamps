@@ -228,6 +228,21 @@ fi
 rm -f cs.log pmd.log codenarc.log license.log pom.log bootlint.log rflint.log jasmine.log validator.log enforcer.log test.log findbugs.log verify-raw.log verify.log danger.log
 
 if echo "$CS_STATUS$PMD_STATUS$CODENARC_STATUS$LICENSE_STATUS$POM_STATUS$BOOTLINT_STATUS$RFLINT_STATUS$JASMINE_STATUS$HTML_STATUS$ENFORCER_STATUS$TEST_STATUS$FINDBUGS_STATUS$VERIFY_STATUS$DANGER_STATUS" | fgrep -qs 'fail'; then
+	if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
+      echo '===== RobotFramework report START =====';
+      cat target/robotframework-reports/output.xml | gzip -c | base64 >robot-report.b64;
+      print_with_delay robot-report.b64;
+      echo '===== RobotFramework report END =====';
+      rm -f robot-report.b64;
+    fi
+  # show MySQL error log only when we were running against MySQL database
+	if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
+      source ./src/main/scripts/ci/common.sh;
+      sudo chmod +r /var/log/mysql/error.log;
+      echo '===== MySQL error log START =====';
+      print_with_delay /var/log/mysql/error.log;
+      echo '===== MySQL error log END =====';
+	fi
 	echo 'Build failed.'
 	exit 1
 fi
