@@ -35,7 +35,8 @@ script:
   # run integration tests always
   - ./src/main/scripts/ci/check-build-and-verify.sh --only-integration-tests;
 
-after_failure:
+after_script:
+  - echo "TEST_RESULT=${TEST_RESULT:-unknown}"
   # In order to be able debug robot framework test flakes we need to have a report.
   # Just encode it to a gzipped binary form and dump to console.
   - if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
