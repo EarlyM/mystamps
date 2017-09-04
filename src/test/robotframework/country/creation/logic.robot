@@ -22,7 +22,7 @@ Create country with name in English and Russian
 	[Documentation]         Verify creation of country by specifying names in 2 languages
 	[Tags]                  unstable
 	Input Text              id=name  Russia
-	Input Text              id=nameRu  Россия
+	Input Text              id=nameRu  Россияя
 	Submit Form             id=add-country-form
 	Location Should Be      ${SITE_URL}/country/russia
 	Element Text Should Be  id=page-header  Stamps of Russia
