@@ -33,7 +33,7 @@ print_log() {
 print_with_delay() {
 	local file="$1"
 	local i=1
-	while read LINE; do
+	while read -r LINE; do
 		if [ $i -gt 100 ]; then
 			let i=1
 			sleep 1
