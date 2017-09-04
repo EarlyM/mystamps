@@ -25,7 +25,7 @@ print_last_lines_of_log() {
 	echo
 	printf "=====> \033[1;33m%s\033[0m\n" "$msg"
 	echo
-	egrep -v '^\[INFO\] Download(ing|ed):' "$log_file" | tail -100 || :
+	egrep -v '^\[INFO\] Download(ing|ed):' "$log_file" | tail -10 || :
 }
 
 print_log() {
@@ -48,7 +48,7 @@ print_with_delay() {
 			let i=1
 			sleep 1
 		fi
-		printf '%s\n' "$LINE"
+		printf '%s\n' "$LINE" | stdbuf -oL -eL
 		let i++
 	done<"$file"
 }
