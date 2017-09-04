@@ -48,7 +48,7 @@ print_with_delay() {
 			let i=1
 			sleep 1
 		fi
-		printf '%s\n' "$LINE" | stdbuf -oL -eL
+		stdbuf -oL -eL printf '%s\n' "$LINE"
 		let i++
 	done<"$file"
 }
