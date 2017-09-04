@@ -38,10 +38,8 @@ script:
 after_script:
   - echo TRAVIS_TEST_RESULT=${TRAVIS_TEST_RESULT:-unknown}
   - echo SCRIPT_RESULT=${SCRIPT_RESULT:-unknown}
-  - egrep 'std(out|err)' verify.log || true
-  - pwd
-  - ls -l target
   - find . -type f -name '*.log' || true
+  - mysql -u root -e "SHOW ENGINE INNODB STATUS\G;";
   - mysql -u travis --database mystamps -e "INSERT INTO countries(name,name_ru,slug,created_at,created_by,updated_at,updated_by) VALUES('Czech','Чехия','czech',NOW(),1,NOW(),1);";
   - mysql -u travis --database mystamps -e "SELECT * FROM countries;";
   # show MySQL error log only when we were running against MySQL database
