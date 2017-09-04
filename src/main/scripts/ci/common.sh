@@ -18,6 +18,16 @@ print_status() {
 	printf "* %s... \033[1;%dm%s\033[0m\n" "$msg" "$color" "$status"
 }
 
+print_last_lines_of_log() {
+	local log_file="$1"
+	local msg="$2"
+	
+	echo
+	printf "=====> \033[1;33m%s\033[0m\n" "$msg"
+	echo
+	egrep -v '^\[INFO\] Download(ing|ed):' "$log_file" | tail -100 || :
+}
+
 print_log() {
 	local log_file="$1"
 	local msg="$2"
