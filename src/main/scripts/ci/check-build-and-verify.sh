@@ -230,8 +230,10 @@ if [ "$RUN_ONLY_INTEGRATION_TESTS" = 'yes' ]; then
 	# Just encode it to a gzipped binary form and dump to console.
 	if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
 		echo "===== REPORT START ====="
-		cat target/robotframework-reports/output.xml | gzip -c | base64
+		cat target/robotframework-reports/output.xml | gzip -c | base64 >robot-report.b64
+		print_with_delay robot-report.b64
 		echo "===== REPORT END ====="
+		rm -f robot-report.b64
 	fi
 fi
 
