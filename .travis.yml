@@ -30,12 +30,14 @@ script:
   #- set -o errexit # exit immediately when commands return a non-zero status
   # run all check analysis and unit tests only on travis profile
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
-      ./src/main/scripts/ci/check-build-and-verify.sh;
+      ./src/main/scripts/ci/check-build-and-verify.sh || SCRIPT_RESULT=fail1;
     fi
   # run integration tests always
-  - ./src/main/scripts/ci/check-build-and-verify.sh --only-integration-tests;
+  - ./src/main/scripts/ci/check-build-and-verify.sh --only-integration-tests || SCRIPT_RESULT=fail2;
 
-after_failure:
+after_script:
+  - echo TRAVIS_TEST_RESULT=${TRAVIS_TEST_RESULT:-unknown}
+  - echo SCRIPT_RESULT=${SCRIPT_RESULT:-unknown}
   - mysql -u travis --database mystamps -e "SELECT * FROM countries;";
   # show MySQL error log only when we were running against MySQL database
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
