@@ -38,13 +38,14 @@ script:
 after_script:
   - echo TRAVIS_TEST_RESULT=${TRAVIS_TEST_RESULT:-unknown}
   - echo SCRIPT_RESULT=${SCRIPT_RESULT:-unknown}
+  - egrep 'std(out|err)' verify.log
   - mysql -u travis --database mystamps -e "SELECT * FROM countries;";
   # show MySQL error log only when we were running against MySQL database
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
       source ./src/main/scripts/ci/common.sh;
-      sudo chmod +r /var/log/mysql/error.log;
+      sudo cat /var/log/mysql/error.log > mysql-error.log;
       echo '===== MySQL error log START =====';
-      print_with_delay /var/log/mysql/error.log;
+      print_with_delay mysql-error.log;
       echo '===== MySQL error log END =====';
     fi
   # In order to be able debug robot framework test flakes we need to have a report.
