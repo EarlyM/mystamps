@@ -27,7 +27,7 @@ before_script:
     fi
 
 script:
-  - set -o errexit # exit immediately when commands return a non-zero status
+  #- set -o errexit # exit immediately when commands return a non-zero status
   # run all check analysis and unit tests only on travis profile
   - if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
       ./src/main/scripts/ci/check-build-and-verify.sh;
