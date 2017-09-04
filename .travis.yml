@@ -37,6 +37,7 @@ script:
 
 after_script:
   - echo "TEST_RESULT=${TEST_RESULT:-unknown}"
+  - mysql -u travis --database mystamps -e "SELECT * FROM countries;";
   # In order to be able debug robot framework test flakes we need to have a report.
   # Just encode it to a gzipped binary form and dump to console.
   - if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
