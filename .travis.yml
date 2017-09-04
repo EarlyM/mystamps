@@ -42,6 +42,7 @@ after_failure:
   - if fgrep -qs 'status="FAIL"' target/robotframework-reports/output.xml; then
       echo '===== RobotFramework report START =====';
       cat target/robotframework-reports/output.xml | gzip -c | base64 >robot-report.b64;
+      source ./src/main/scripts/ci/common.sh;
       print_with_delay robot-report.b64;
       echo '===== RobotFramework report END =====';
       rm -f robot-report.b64;
