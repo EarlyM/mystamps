@@ -20,6 +20,7 @@ Create country with name in English
 
 Create country with name in English and Russian
 	[Documentation]         Verify creation of country by specifying names in 2 languages
+	[Tags]                  unstable
 	Input Text              id=name  Russia
 	Input Text              id=nameRu  Россия
 	Submit Form             id=add-country-form
