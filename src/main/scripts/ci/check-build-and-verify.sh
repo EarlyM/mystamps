@@ -237,7 +237,7 @@ if echo "$CS_STATUS$PMD_STATUS$CODENARC_STATUS$LICENSE_STATUS$POM_STATUS$BOOTLIN
     fi
   # show MySQL error log only when we were running against MySQL database
 	if [ "$SPRING_PROFILES_ACTIVE" = 'travis' ]; then
-      source ./src/main/scripts/ci/common.sh;
+      source $(dirname "$0")/src/main/scripts/ci/common.sh;
       sudo chmod +r /var/log/mysql/error.log;
       echo '===== MySQL error log START =====';
       print_with_delay /var/log/mysql/error.log;
