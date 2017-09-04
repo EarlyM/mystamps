@@ -76,6 +76,8 @@ public class CountryServiceImpl implements CountryService {
 		Integer id = countryDao.add(country);
 		
 		log.info("Country #{} has been created ({})", id, country);
+		System.out.println("[stdout] Country " + country + " has been created (" + id + ")");
+		System.err.println("[stderr] Country " + country + " has been created (" + id + ")");
 		
 		return slug;
 	}
