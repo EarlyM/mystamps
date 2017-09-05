@@ -36,6 +36,9 @@ script:
   # run integration tests always
   - ./src/main/scripts/ci/check-build-and-verify.sh --only-integration-tests || SCRIPT_RESULT=fail2;
 
+after_failure:
+  - find . -type f -name '*.log' || true
+
 after_script:
   - echo TRAVIS_TEST_RESULT=${TRAVIS_TEST_RESULT:-unknown}
   - echo SCRIPT_RESULT=${SCRIPT_RESULT:-unknown}
