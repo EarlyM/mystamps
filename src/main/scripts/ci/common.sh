@@ -18,16 +18,6 @@ print_status() {
 	printf "* %s... \033[1;%dm%s\033[0m\n" "$msg" "$color" "$status"
 }
 
-print_last_lines_of_log() {
-	local log_file="$1"
-	local msg="$2"
-	
-	echo
-	printf "=====> \033[1;33m%s\033[0m\n" "$msg"
-	echo
-	egrep -v '^\[INFO\] Download(ing|ed):' "$log_file" | tail -10 || :
-}
-
 print_log() {
 	local log_file="$1"
 	local msg="$2"
@@ -35,20 +25,6 @@ print_log() {
 	echo
 	printf "=====> \033[1;33m%s\033[0m\n" "$msg"
 	echo
-	egrep -v '^\[INFO\] Download(ing|ed):' "$log_file" >"$log_file.new" || :
-	print_with_delay "$log_file.new"
-	rm -f "$log_file.new"
+	egrep -v '^\[INFO\] Download(ing|ed):' "$log_file" || :
 }
 
-print_with_delay() {
-	local file="$1"
-	local i=1
-	while read -r LINE; do
-		if [ $i -gt 100 ]; then
-			let i=1
-			sleep 1
-		fi
-		stdbuf -oL -eL printf '%s\n' "$LINE"
-		let i++
-	done<"$file"
-}
