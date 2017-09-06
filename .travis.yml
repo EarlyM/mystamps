@@ -1,8 +1,9 @@
 language: java
 
 script:
-  - echo 'do something'; false
+  - echo 'do something'
   - echo 'do something else'
+  - exit 1
 
 after_script:
   - echo 'After script'
