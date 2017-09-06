@@ -1,9 +1,9 @@
 language: java
 
 script:
-  - echo 'do something'
-  - echo 'do something else'
-  - exit 1
+  - echo 'do something'; false || BUILD_FAILS=yes
+  - echo 'do something else' || BUILD_FAILS=yes
+  - test "$BUILD_FAILS" != yes
 
 after_script:
   - echo 'After script'
