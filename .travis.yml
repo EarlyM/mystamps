@@ -1,7 +1,7 @@
 language: java
 
 script:
-  - echo 'do something'
+  - echo 'do something'; false
   - echo 'do something else'
 
 after_script:
