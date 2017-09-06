@@ -35,7 +35,7 @@ script:
   - ./src/main/scripts/ci/check-build-and-verify.sh --only-integration-tests || FAIL_BUILD=yes;
   # fail a build when one of the scripts have failed
   - if [ -n "${FAIL_BUILD}" ]; then
-      exit 1;
+      return 1;
     fi
 
 after_failure:
