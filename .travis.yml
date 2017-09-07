@@ -1,6 +1,12 @@
 language: java
 
+before_script:
+  - set -o errexit
+  - echo $-
+  - echo 'Before script'
+
 script:
+  - echo $-
   - ./exit-with-code.sh 0
   - ./exit-with-code.sh 1
 
